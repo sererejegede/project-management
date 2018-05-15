@@ -10,6 +10,7 @@ class Comment extends Model
        'body',
        'url',
        'commentable_id',
-       'commentable_type'
+       'commentable_type',
+       'user_id'
     ];
 }
