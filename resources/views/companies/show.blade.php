@@ -132,7 +132,19 @@
     <div class="jumbotron">
       <h3 class="display-3">{{ $company->name }}</h3>
       <p>{{ $company->description }}</p>
-      <a class="btn btn-outline-primary btn-sm float-right" data-toggle="modal" data-target="#companyEditModal">Edit</a>
+      <div class="float-right">
+        <a class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#companyEditModal">Edit</a>
+        {{--<a class="btn btn-danger btn-sm"--}}
+           {{--onclick=" if ( confirm('Are you sure you want to delete this Company? \n You can\'t revert this action!')){--}}
+             {{--document.getElementById('company_delete').submit();--}}
+         {{--}">Delete</a>--}}
+      </div>
+
+
+      {{--<form id="company_delete" action="{{ route('companies.destroy', [$company->id]) }}" method="post" style="display: none">--}}
+        {{--@csrf--}}
+        {{--@method('delete')--}}
+      {{--</form>--}}
     </div>
     <!-- Example row of columns -->
     <div class="card-deck">

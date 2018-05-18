@@ -80,10 +80,19 @@
             @foreach($companies as $company)
               <li class="list-group-item">
                 <a href="companies/{{ $company->id }}">{{ $company->name }}</a>
+                <a class="btn btn-danger text-white btn-sm float-right"
+                   onclick=" if ( confirm('Are you sure you want to delete this Company? \n You can\'t revert this action!')){
+             document.getElementById('company_delete').submit();
+         }">Delete</a>
               </li>
+              <form id="company_delete" action="{{ route('companies.destroy', [$company->id]) }}" method="post" style="display: none">
+                @csrf
+                @method('delete')
+              </form>
             @endforeach
           </ul>
-          <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#companyCreateModal">
+          <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                  data-target="#companyCreateModal">
             Add New
           </button>
           {{--<a href="{{ route('companies.create') }}" class="btn btn-info float-right">Add New</a>--}}

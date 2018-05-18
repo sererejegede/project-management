@@ -84,6 +84,8 @@ class CompaniesController extends Controller
             ->with('success', 'Company updated successfully');
       }
 
+//      return redirect()->route('companies.show', ['company' => $company])
+//         ->with('errors', 'Something went wrong');
       return redirect()->back()->withInput();
    }
 
@@ -95,6 +97,14 @@ class CompaniesController extends Controller
     */
    public function destroy(Company $company)
    {
-      //
+      $deleteCompany = Company::destroy($company->id);
+      if ($deleteCompany > 0){
+         $companies = Company::all();
+         $users = User::all();
+//         return view('companies.index', ['companies' => $companies, 'users' => $users]);
+         return redirect()->route('companies.index', ['companies' => $companies, 'users' => $users])
+            ->with('success', 'Company deleted successfully');
+      }
+//      dd($company->id);
    }
 }
