@@ -16,7 +16,8 @@ class CompaniesController extends Controller
    public function index()
    {
       $companies = Company::all();
-      return view('companies.index', ['companies' => $companies]);
+      $users = User::all();
+      return view('companies.index', ['companies' => $companies, 'users' => $users]);
    }
 
    /**
@@ -39,6 +40,9 @@ class CompaniesController extends Controller
    public function store(Request $request)
    {
       Company::create($request->all());
+      $companies = Company::all();
+      $users = User::all();
+      return view('companies.index', ['companies' => $companies, 'users' => $users]);
    }
 
    /**
@@ -49,7 +53,8 @@ class CompaniesController extends Controller
     */
    public function show(Company $company)
    {
-      //
+      $company = Company::find($company->id);
+      return view('companies.show', ['company' => $company]);
    }
 
    /**
@@ -72,7 +77,14 @@ class CompaniesController extends Controller
     */
    public function update(Request $request, Company $company)
    {
-      //
+      $companyUpdate = Company::find($company->id)->update($request->all());
+
+      if ($companyUpdate){
+         return redirect()->route('companies.show', ['company' => $company])
+            ->with('success', 'Company updated successfully');
+      }
+
+      return redirect()->back()->withInput();
    }
 
    /**

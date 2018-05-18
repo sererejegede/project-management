@@ -25,6 +25,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resources([
    'companies' => 'CompaniesController',
    'users' => 'UsersController',
+   'projects' => 'ProjectsController',
 ]);
 
 //Route::resource('companies', 'CompaniesController');

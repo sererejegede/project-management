@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::all();
+        return view('projects.index', ['projects' => $projects]);
     }
 
     /**
@@ -35,7 +37,9 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Project::create($request->all());
+       $company = Company::find($request->company_id);
+       return view('companies.show', ['company' => $company]);
     }
 
     /**
