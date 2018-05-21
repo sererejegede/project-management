@@ -23,7 +23,7 @@
                 <input id="name" type="text"
                        class="form-control" name="name" value="{{ old('name') }}" required autofocus>
               </div>
-            </div>
+            </div>{{--Name--}}
 
             <div class="form-group row">
               <label for="description"
@@ -38,27 +38,21 @@
                 {{--</span>--}}
                 {{--@endif--}}
               </div>
-            </div>
+            </div>{{--Description--}}
 
-            <div class="form-group row">
-              <label for="user_id"
-                     class="col-md-4 col-form-label text-md-right">User</label>
+            {{--<div class="form-group row">--}}
+            {{--<label for="user_id"--}}
+            {{--class="col-md-4 col-form-label text-md-right">User</label>--}}
 
-              <div class="col-md-6">
-                <select id="user_id" class="form-control" name="user_id" required>
-                  <option value="" disabled selected>--Select User--</option>
-                  @foreach($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                  @endforeach
-                </select>
-
-                {{--@if ($errors->has('password'))--}}
-                {{--<span class="invalid-feedback">--}}
-                {{--<strong>{{ $errors->first('password') }}</strong>--}}
-                {{--</span>--}}
-                {{--@endif--}}
-              </div>
-            </div>
+            {{--<div class="col-md-6">--}}
+            {{--<select id="user_id" class="form-control" name="user_id" required>--}}
+            {{--<option value="" disabled selected>--Select User--</option>--}}
+            {{--@foreach($users as $user)--}}
+            {{--<option value="{{ $user->id }}">{{ $user->name }}</option>--}}
+            {{--@endforeach--}}
+            {{--</select>--}}
+            {{--</div>--}}
+            {{--</div>--}}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-out-primary" data-dismiss="modal">Close</button>
@@ -81,17 +75,21 @@
               <li class="list-group-item">
                 <a href="companies/{{ $company->id }}">{{ $company->name }}</a>
                 <a class="btn btn-danger text-white btn-sm float-right"
-                   onclick=" if ( confirm('Are you sure you want to delete this Company? \n You can\'t revert this action!')){
-             document.getElementById('company_delete').submit();
-         }">Delete</a>
+                   onclick=" if ( confirm('Are you sure you want to delete {{ $company->name }}? \n You can\'t revert this action!')){
+                           document.getElementById('company_delete_{{ $company->id }}').submit();
+                           }">
+                  Delete
+
+                </a>
               </li>
-              <form id="company_delete" action="{{ route('companies.destroy', [$company->id]) }}" method="post" style="display: none">
+              <form id="company_delete_{{ $company->id }}" action="{{ route('companies.destroy', [$company->id]) }}" method="post"
+                    style="display: none">
                 @csrf
                 @method('delete')
               </form>
             @endforeach
           </ul>
-          <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+          <button type="button" class="btn btn-primary float-right my-5" data-toggle="modal"
                   data-target="#companyCreateModal">
             Add New
           </button>

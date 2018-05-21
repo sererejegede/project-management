@@ -149,18 +149,30 @@
     <!-- Example row of columns -->
     <div class="card-deck">
       @foreach($company->projects as $project)
-        <div class="card">
+        <div class="card hover">
           <div class="card-body">
             <h5 class="card-title">{{ $project->name }}</h5>
             <p class="card-text">{{ $project->description }}</p>
           </div>
           <div class="card-footer">
             <small class="text-muted">
-              <a class="blockquote blockquote-footer" href="#" role="button">View details »</a>
+              <a class="blockquote blockquote-footer card-link" href="#" role="button">View details »</a>
+              <a class="btn btn-danger text-white btn-sm float-right"
+                 onclick=" if ( confirm('Are you sure you want to delete {{ $project->name }}? \n You can\'t revert this action!')){
+                         document.getElementById('project_delete_{{ $project->id }}').submit();
+                         }">
+                Delete
+              </a>
             </small>
           </div>
         </div>
+        <form id="project_delete_{{ $project->id }}" action="{{ route('projects.destroy', [$project->id]) }}" method="post"
+                    style="display: none">
+          @csrf
+          @method('delete')
+        </form>
       @endforeach
+
     </div>
 
     <hr>

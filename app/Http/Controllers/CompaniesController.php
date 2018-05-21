@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends Controller
 {
@@ -16,8 +17,7 @@ class CompaniesController extends Controller
    public function index()
    {
       $companies = Company::all();
-      $users = User::all();
-      return view('companies.index', ['companies' => $companies, 'users' => $users]);
+      return view('companies.index', ['companies' => $companies]);
    }
 
    /**
@@ -39,10 +39,20 @@ class CompaniesController extends Controller
     */
    public function store(Request $request)
    {
-      Company::create($request->all());
-      $companies = Company::all();
-      $users = User::all();
-      return view('companies.index', ['companies' => $companies, 'users' => $users]);
+      // Check if user is logged in
+      if (Auth::check()){
+         $companyCreate = Company::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'user_id' => Auth::user()->id
+         ]);
+         if ($companyCreate){
+            return back()->with('success', $request->get('name').' created successfully');
+         }
+      } else {
+         return redirect()->route('login')->with('custom_error', 'You must be logged in to create a company');
+      }
+
    }
 
    /**
@@ -80,13 +90,9 @@ class CompaniesController extends Controller
       $companyUpdate = Company::find($company->id)->update($request->all());
 
       if ($companyUpdate){
-         return redirect()->route('companies.show', ['company' => $company])
-            ->with('success', 'Company updated successfully');
+         return back()->with('success', $company->name.' updated successfully');
       }
-
-//      return redirect()->route('companies.show', ['company' => $company])
-//         ->with('errors', 'Something went wrong');
-      return redirect()->back()->withInput();
+      return back()->with('custom_error', 'Company could not be updated');
    }
 
    /**
@@ -97,14 +103,10 @@ class CompaniesController extends Controller
     */
    public function destroy(Company $company)
    {
-      $deleteCompany = Company::destroy($company->id);
+
+      $deleteCompany = Company::find($company->id)->delete();
       if ($deleteCompany > 0){
-         $companies = Company::all();
-         $users = User::all();
-//         return view('companies.index', ['companies' => $companies, 'users' => $users]);
-         return redirect()->route('companies.index', ['companies' => $companies, 'users' => $users])
-            ->with('success', 'Company deleted successfully');
+         return back()->with('success', 'Deleted!');
       }
-//      dd($company->id);
    }
 }

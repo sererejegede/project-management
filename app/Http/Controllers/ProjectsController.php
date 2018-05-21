@@ -84,6 +84,11 @@ class ProjectsController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+       $deleteProject = Project::find($project->id)->delete();
+       if ($deleteProject > 0){
+//          $companies = Company::all();
+//          $users = User::all();
+          return back()->with('success', 'Deleted!');
+       }
     }
 }
