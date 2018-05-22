@@ -147,9 +147,9 @@
       {{--</form>--}}
     </div>
     <!-- Example row of columns -->
-    <div class="card-deck">
+    <div class="row">
       @foreach($company->projects as $project)
-        <div class="card hover">
+        <div class="card col-md-3 hover">
           <div class="card-body">
             <h5 class="card-title">{{ $project->name }}</h5>
             <p class="card-text">{{ $project->description }}</p>
@@ -177,8 +177,11 @@
 
     <hr>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#projectCreateModal">
-      Add Project
-    </button>
+    <div class="p-lg-4 py-4">
+      <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#projectCreateModal">
+        Add Project
+      </button>
+    </div>
+
   </div>
 @endsection

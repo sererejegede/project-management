@@ -16,6 +16,7 @@ class ProjectsController extends Controller
     public function index()
     {
         $projects = Project::all();
+//        return $projects->load('company.user');
         return view('projects.index', ['projects' => $projects]);
     }
 
@@ -38,8 +39,9 @@ class ProjectsController extends Controller
     public function store(Request $request)
     {
         Project::create($request->all());
+//       return $request->all();
        $company = Company::find($request->company_id);
-       return view('companies.show', ['company' => $company]);
+       return view('companies.show', ['company' => $company])->with('success', $request->get('name').' Created Successfully');
     }
 
     /**

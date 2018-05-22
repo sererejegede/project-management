@@ -12,6 +12,9 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="{{ asset('assets/js/project.js') }}" ></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -36,6 +39,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->
         <ul class="navbar-nav mr-auto">
+          <li><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
+          <li><a class="nav-link" href="{{ route('companies.index') }}">Companies</a></li>
+          <li><a class="nav-link" href="{{ route('projects.index') }}">Projects</a></li>
+          <li><a class="nav-link" href="{{ route('tasks.index') }}">Task</a></li>
         </ul>
 
         <!-- Right Side Of Navbar -->
@@ -45,8 +52,7 @@
           <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
           <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
           @else
-            <li><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
-            <li><a class="nav-link" href="{{ route('companies.index') }}">Companies</a></li>
+
             {{--<li><a class="nav-link" href="{{ route('projects.index') }}">Companies</a></li>--}}
             <li class="nav-item dropdown">
               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
@@ -81,5 +87,10 @@
     {{--@yield('companies')--}}
   </main>
 </div>
+<script>
+    setTimeout(function () {
+        $('.alert').fadeOut();
+    }, 5000);
+</script>
 </body>
 </html>

@@ -16,8 +16,13 @@ class CompaniesController extends Controller
     */
    public function index()
    {
-      $companies = Company::all();
-      return view('companies.index', ['companies' => $companies]);
+      if (Auth::user()){
+         $companies = Company::where('user_id', Auth::user()->id)->get();
+         return view('companies.index', ['companies' => $companies]);
+      } else {
+         return redirect()->route('login')->with('custom_error', 'Please log in');
+      }
+
    }
 
    /**
@@ -63,7 +68,9 @@ class CompaniesController extends Controller
     */
    public function show(Company $company)
    {
-      $company = Company::find($company->id);
+//     return $company;
+//      $company = Company::find($company->id);
+//      return $company->load('user');
       return view('companies.show', ['company' => $company]);
    }
 
