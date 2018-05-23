@@ -84,6 +84,8 @@
     @include('utils.success')
 
     @yield('content')
+
+    @include('utils.comment')
     {{--@yield('companies')--}}
   </main>
 </div>

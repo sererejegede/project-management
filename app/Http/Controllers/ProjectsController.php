@@ -41,7 +41,8 @@ class ProjectsController extends Controller
         Project::create($request->all());
 //       return $request->all();
        $company = Company::find($request->company_id);
-       return view('companies.show', ['company' => $company])->with('success', $request->get('name').' Created Successfully');
+//       return view('companies.show', ['company' => $company])->with('success', $request->get('name').' Created Successfully');
+       return back()->with('success', $request->get('name').' Created Successfully');
     }
 
     /**
@@ -52,7 +53,10 @@ class ProjectsController extends Controller
      */
     public function show(Project $project)
     {
-        //
+//       $comments = $project->comments()->get();
+       $comments = $project->load('comments.user')->comments;
+//       return $project->load('comments.user');
+        return view('projects.show', compact('project'), ['comments' => $comments]);
     }
 
     /**

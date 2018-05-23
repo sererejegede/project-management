@@ -156,7 +156,7 @@
           </div>
           <div class="card-footer">
             <small class="text-muted">
-              <a class="blockquote blockquote-footer card-link" href="#" role="button">View details »</a>
+              <a class="blockquote blockquote-footer card-link" href="{{ route('projects.show', $project->id) }}" role="button">View details »</a>
               <a class="btn btn-danger text-white btn-sm float-right"
                  onclick=" if ( confirm('Are you sure you want to delete {{ $project->name }}? \n You can\'t revert this action!')){
                          document.getElementById('project_delete_{{ $project->id }}').submit();

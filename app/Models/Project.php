@@ -23,7 +23,6 @@ class Project extends Model
       return $this->belongsTo(Company::class);
    }
 
-   // A Project belongs to a Company
    // ONE User has MANY Projects
    public function users()
    {
@@ -34,5 +33,9 @@ class Project extends Model
    public function tasks()
    {
       return $this->hasMany(Task::class);
+   }
+
+   public function comments(){
+      return $this->morphMany(Comment::class, 'commentable');
    }
 }

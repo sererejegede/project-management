@@ -22,17 +22,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::middleware(['auth'])->group(function (){
-   Route::resources([
-      'companies' => 'CompaniesController',
-      'users' => 'UsersController',
-      'projects' => 'ProjectsController',
-      'tasks' => 'TasksController',
-   ]);
-});
+//Route::middleware(['auth'])->group(function (){
+//
+//});
 
 
-
+Route::resources([
+   'companies' => 'CompaniesController',
+   'users' => 'UsersController',
+   'projects' => 'ProjectsController',
+   'tasks' => 'TasksController',
+   'comments' => 'CommentsController',
+]);
 //Route::resource('companies', 'CompaniesController');
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
@@ -35,7 +36,22 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//       dd($request);
+       if (Auth::check()) {
+          $comment = Comment::create([
+             'body' => $request->input('body'),
+             'url' => $request->input('url'),
+             'commentable_id' => $request->input('commentable_id'),
+             'commentable_type' => $request->input('commentable_type'),
+             'user_id' => Auth::user()->id
+          ]);
+          if ($comment){
+             return back()->with('success','Done');
+          }
+       } else {
+          return redirect()->route('login')->with('custom_error', 'You must be logged in to create a company');
+       }
+
     }
 
     /**
