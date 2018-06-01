@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Project;
+use App\User;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
@@ -54,8 +55,8 @@ class ProjectsController extends Controller
     public function show(Project $project)
     {
 //       $comments = $project->comments()->get();
+//       return $project->load('comments', 'users');
        $comments = $project->load('comments.user')->comments;
-//       return $project->load('comments.user');
         return view('projects.show', compact('project'), ['comments' => $comments]);
     }
 
@@ -96,5 +97,13 @@ class ProjectsController extends Controller
 //          $users = User::all();
           return back()->with('success', 'Deleted!');
        }
+    }
+
+    public function addUser(Request $request)
+    {
+       // For API
+       $project = Project::find($request->input('project_id'));
+       $user = User::where('email', $request->input('email'))->get()->first();
+       return $project->users()->attach($user->id);
     }
 }

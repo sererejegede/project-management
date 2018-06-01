@@ -14,12 +14,15 @@ class User extends Authenticatable
 {
    use Notifiable;
 
+
    // The attributes that are mass assignable.
    protected $fillable = [
       'name',
       'email',
       'password',
       'username',
+      'api_token',
+      'profile_pic',
       'role_id'
    ];
 
@@ -34,6 +37,7 @@ class User extends Authenticatable
       return $this->belongsTo(Role::class);
    }
 
+   // One User has many projects
    public function projects()
    {
       return $this->belongsToMany(Project::class);

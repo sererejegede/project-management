@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::resources([
-//   'companies' => 'CompaniesController',
-//   'users' => 'UsersController',
-//   'projects' => 'ProjectsController',
-//   'tasks' => 'TasksController',
-//   'comments' => 'CommentsController',
-//]);
+Route::post('login', 'Auth\LoginController@apiLogin');
+Route::post('logout', 'Auth\LoginController@apiLogout');
+Route::middleware(['auth:api'])->group(function () {
+   Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
+   Route::resources([
+      'companies' => 'CompaniesController',
+      'users' => 'UsersController',
+      'projects' => 'ProjectsController',
+      'tasks' => 'TasksController',
+      'comments' => 'CommentsController',
+   ]);
+});

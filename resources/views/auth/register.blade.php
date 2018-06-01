@@ -92,6 +92,7 @@
                   <button type="submit" class="btn btn-primary">
                     {{ __('Register') }}
                   </button>
+                  <a class="btn-link float-right" href="{{ route('login') }}">Login</a>
                 </div>
               </div>
             </form>

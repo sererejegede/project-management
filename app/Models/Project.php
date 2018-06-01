@@ -23,7 +23,7 @@ class Project extends Model
       return $this->belongsTo(Company::class);
    }
 
-   // ONE User has MANY Projects
+   // ONE Project has MANY Users
    public function users()
    {
       return $this->belongsToMany(User::class);

@@ -10,7 +10,9 @@
         </div>
         <ul class="list-group list-group-flush">
           @foreach($users as $user)
-            <li class="list-group-item">{{ $user->name }}</li>
+            <li class="list-group-item">
+              <a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a>
+            </li>
           @endforeach
         </ul>
       </div>

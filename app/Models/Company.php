@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+//   protected $guard = 'api';
+
    protected $fillable = [
       'name',
       'description',

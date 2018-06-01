@@ -12,8 +12,8 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
-  <script src="{{ asset('assets/js/project.js') }}" ></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="{{ asset('js/jquery-3.2.1.js') }}" ></script>
+  <script src="{{ asset('js/project.js') }}" ></script>
 
 
   <!-- Fonts -->
@@ -26,7 +26,8 @@
 </head>
 <body>
 <div id="app">
-  <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+  @if(Auth::check())
+    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
     <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">
         {{ config('app.name') }}
@@ -77,22 +78,18 @@
       </div>
     </div>
   </nav>
+  @endif
 
   <main class="py-4">
-
     @include('utils.error')
     @include('utils.success')
 
     @yield('content')
-
+    @if(Auth::check() && strpos(Route::currentRouteName(), 'show') !== false)
     @include('utils.comment')
+    @endif
     {{--@yield('companies')--}}
   </main>
 </div>
-<script>
-    setTimeout(function () {
-        $('.alert').fadeOut();
-    }, 5000);
-</script>
 </body>
 </html>
