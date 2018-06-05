@@ -1,9 +1,9 @@
 
 <div class="container">
   <div class="comments col-md-9 mt-lg-5" id="comments">
-    <h3 class="mb-2">Comments</h3>
     <!-- comment -->
-    @if(isset($comments))
+    @if(isset($comments) && (count($comments) > 0))
+      <h3 class="mb-2">Comments</h3>
     @foreach($comments as $comment)
     <div class="comment mb-2 row">
       <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">

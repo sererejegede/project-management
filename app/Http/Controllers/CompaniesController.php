@@ -16,16 +16,16 @@ class CompaniesController extends Controller
     */
    public function index()
    {
-      if (Auth::user()){
-         $companies = Company::where('user_id', Auth::user()->id)->get();
-         return view('companies.index', ['companies' => $companies]);
-      } else {
-         return redirect()->route('login')->with('custom_error', 'Please log in');
-      }
+//      if (Auth::user()){
+//         $companies = Company::where('user_id', Auth::user()->id)->get();
+//         return view('companies.index', ['companies' => $companies]);
+//      } else {
+//         return redirect()->route('login')->with('custom_error', 'Please log in');
+//      }
 
 
       /**Api*/
-//      return Company::all();
+      return Company::all();
    }
 
    /**
@@ -72,11 +72,11 @@ class CompaniesController extends Controller
    public function show(Company $company)
    {
 //     return $company;
-      $company = Company::find($company->id);
-      return view('companies.show', ['company' => $company]);
+//      $company = Company::find($company->id);
+//      return view('companies.show', ['company' => $company]);
 
       /**API*/
-//      return $company->load('user', 'projects');
+      return $company->load('user', 'projects');
    }
 
    /**

@@ -20,8 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login', 'Auth\LoginController@apiLogin');
 Route::post('logout', 'Auth\LoginController@apiLogout');
-Route::middleware(['auth:api'])->group(function () {
+//Route::middleware(['auth:api'])->group(function () {
    Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
+//   Route::get('companies', ['uses' => 'CompaniesController@index']);
    Route::resources([
       'companies' => 'CompaniesController',
       'users' => 'UsersController',
@@ -29,4 +30,4 @@ Route::middleware(['auth:api'])->group(function () {
       'tasks' => 'TasksController',
       'comments' => 'CommentsController',
    ]);
-});
+//});
