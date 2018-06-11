@@ -48,17 +48,27 @@ class CompaniesController extends Controller
    public function store(Request $request)
    {
       // Check if user is logged in
-      if (Auth::check()){
-         $companyCreate = Company::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'user_id' => Auth::user()->id
-         ]);
-         if ($companyCreate){
-            return back()->with('success', $request->get('name').' created successfully');
-         }
-      } else {
-         return redirect()->route('login')->with('custom_error', 'You must be logged in to create a company');
+//      if (Auth::check()){
+//         $companyCreate = Company::create([
+//            'name' => $request->input('name'),
+//            'description' => $request->input('description'),
+//            'user_id' => Auth::user()->id
+//         ]);
+//         if ($companyCreate){
+//            return back()->with('success', $request->get('name').' created successfully');
+//         }
+//      } else {
+//         return redirect()->route('login')->with('custom_error', 'You must be logged in to create a company');
+//      }
+
+      /** API */
+      $companyCreate = Company::create([
+         'name' => $request->input('name'),
+         'description' => $request->input('description'),
+         'user_id' => $request->input('user_id'),
+      ]);
+      if ($companyCreate) {
+         return response()->json($companyCreate, 201);
       }
 
    }
@@ -67,11 +77,10 @@ class CompaniesController extends Controller
     * Display the specified resource.
     *
     * @param  \App\Models\Company $company
-    * @return \Illuminate\Http\Response
+    * @return Company|\Illuminate\Http\Response
     */
    public function show(Company $company)
    {
-//     return $company;
 //      $company = Company::find($company->id);
 //      return view('companies.show', ['company' => $company]);
 

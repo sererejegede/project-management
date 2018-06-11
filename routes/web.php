@@ -24,13 +24,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::middleware(['auth'])->group(function (){
 //   Route::patch('uploadFile/{user}', 'UsersController@uploadFile')->name('upload.file');
-//   Route::resources([
-//      'companies' => 'CompaniesController',
-//      'users' => 'UsersController',
-//      'projects' => 'ProjectsController',
-//      'tasks' => 'TasksController',
-//      'comments' => 'CommentsController',
-//   ]);
+   Route::resources([
+      'companies' => 'CompaniesController',
+      'users' => 'UsersController',
+      'projects' => 'ProjectsController',
+      'tasks' => 'TasksController',
+      'comments' => 'CommentsController',
+   ]);
 //});
 
 
