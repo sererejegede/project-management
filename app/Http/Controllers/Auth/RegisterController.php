@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegisterController extends Controller
 {
@@ -77,5 +79,44 @@ class RegisterController extends Controller
     {
        $user->generateToken();
        return response()->json(['data' => $user->toArray()], 201);
+//       try {
+//          if (!$token = JWTAuth::attempt($user)) {
+//             return response()->json([
+//                'message' => 'Invalid credentials',
+//                'code' => 401
+//             ], 401);
+//          }
+//       } catch (JWTException $exception) {
+//          return response()->json(['message' => 'Error validating token'], 500);
+//       }
+//       return response()->json(['token' => $token]);
     }
+
+    public function apiRegister (Request $request)
+    {
+       $this->validator($request->all())->validate();
+       $this->create($request->all());
+
+       $credentials = $request->only('email', 'password');
+       return $this->login($credentials);
+    }
+
+   private function login($credentials)
+   {
+
+      if (! $token = JWTAuth::attempt($credentials)) {
+         return response()->json(['error' => 'Unauthorized'], 401);
+      }
+
+      return $this->respondWithToken($token);
+   }
+
+   protected function respondWithToken($token)
+   {
+      return response()->json([
+         'access_token' => $token,
+         'token_type' => 'bearer',
+         'expires_in' => 3600
+      ]);
+   }
 }

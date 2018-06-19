@@ -17,8 +17,10 @@ class ProjectsController extends Controller
     public function index()
     {
         $projects = Project::all();
-//        return $projects->load('company.user');
-        return view('projects.index', ['projects' => $projects]);
+//        return view('projects.index', ['projects' => $projects]);
+
+        /** API */
+       return $projects->load('company.user');
     }
 
     /**
@@ -55,9 +57,12 @@ class ProjectsController extends Controller
     public function show(Project $project)
     {
 //       $comments = $project->comments()->get();
-//       return $project->load('comments', 'users');
-       $comments = $project->load('comments.user')->comments;
-        return view('projects.show', compact('project'), ['comments' => $comments]);
+//       $comments = $project->load('comments.user')->comments;
+//        return view('projects.show', compact('project'), ['comments' => $comments]);
+
+       /**  API */
+       return $project->load('comments', 'users');
+
     }
 
     /**

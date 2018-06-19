@@ -6,6 +6,8 @@ use App\Models\Company;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class CompaniesController extends Controller
 {
@@ -24,8 +26,10 @@ class CompaniesController extends Controller
 //      }
 
 
-      /**Api*/
-      return Company::all();
+      /** API*/
+      $user = JWTAuth::parseToken()->toUser();
+      $companies = Company::where('user_id', $user->id)->get();
+      return response()->json(['data' => $companies], 200);
    }
 
    /**
@@ -62,10 +66,11 @@ class CompaniesController extends Controller
 //      }
 
       /** API */
+      $user = JWTAuth::parseToken()->toUser();
       $companyCreate = Company::create([
          'name' => $request->input('name'),
          'description' => $request->input('description'),
-         'user_id' => $request->input('user_id'),
+         'user_id' => $user->id,
       ]);
       if ($companyCreate) {
          return response()->json($companyCreate, 201);
@@ -110,10 +115,17 @@ class CompaniesController extends Controller
    {
       $companyUpdate = Company::find($company->id)->update($request->all());
 
+//      if ($companyUpdate){
+//         return back()->with('success', $company->name.' updated successfully');
+//      }
+//      return back()->with('custom_error', 'Company could not be updated');
+
+
+      /** API*/
       if ($companyUpdate){
-         return back()->with('success', $company->name.' updated successfully');
+         return response()->json($company->fresh(), 200);
       }
-      return back()->with('custom_error', 'Company could not be updated');
+      return response()->json(['error' => 'Could not update'], 500);
    }
 
    /**
@@ -127,7 +139,14 @@ class CompaniesController extends Controller
 
       $deleteCompany = Company::find($company->id)->delete();
       if ($deleteCompany > 0){
-         return back()->with('success', 'Deleted!');
+         /** WEB*/
+//         return back()->with('success', 'Deleted!');
+
+         /** API*/
+         return response()->json('Deleted!', 204);
+      } else {
+         return response()->json('Could not delete', 500);
       }
+
    }
 }

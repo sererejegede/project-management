@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -43,28 +46,30 @@ class LoginController extends Controller
      */
     public function apiLogin(Request $request)
     {
-       if (auth()->attempt([
-          'email' => $request->input('email'),
-          'password' => $request->input('password')
-       ]))
-       {
-          $user = auth()->user();
-          $user->api_token = str_random(60);
-          $user->save();
-          return $user;
+       $this->validate($request, [
+          'email' => 'email|required',
+          'password' => 'required'
+       ]);
+       $credentials = $request->only('email', 'password');
+       try {
+          if (!$token = JWTAuth::attempt($credentials)) {
+             return response()->json([
+                'message' => 'Invalid credentials',
+                'code' => 401
+             ], 401);
+          }
+       } catch (JWTException $exception) {
+          return response()->json(['message' => 'Error validating token'], 500);
        }
-       return response()->json([
-          'error' => 'Unauthorized',
-          'code' => 401
-       ], 401);
+       $user = JWTAuth::toUser($token);
+       return response()->json(['token' => $token, 'user' => $user]);
     }
 
     public function apiLogout ()
     {
-       if (auth()->user()) {
-          $user = auth()->user();
-          $user->api_token = null; // clear api token
-          $user->save();
+       $token = JWTAuth::getToken()->get();
+//
+       if (JWTAuth::invalidate($token)) {
 
           return response()->json([
              'message' => 'Thank you for using our application',
@@ -72,7 +77,7 @@ class LoginController extends Controller
        }
 
        return response()->json([
-          'error' => 'Unable to logout user',
+          'error' => 'Unable to log user out',
           'code' => 401,
        ], 401);
     }

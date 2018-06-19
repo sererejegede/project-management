@@ -14,20 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+   return $request->user();
+});
 
 Route::post('login', 'Auth\LoginController@apiLogin');
+Route::post('register', 'Auth\RegisterController@apiRegister');
+
+Route::middleware(['auth.jwt'])->group(function () {
+   Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
+   Route::resources([
+      'companies' => 'CompaniesController',
+      'users' => 'UsersController',
+      'projects' => 'ProjectsController',
+      'tasks' => 'TasksController',
+      'comments' => 'CommentsController',
+   ]);
+});
 Route::post('logout', 'Auth\LoginController@apiLogout');
-//Route::middleware(['auth:api'])->group(function () {
-Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
-Route::post('register', 'Auth\RegisterController@register');
-Route::resources([
-   'companies' => 'CompaniesController',
-   'users' => 'UsersController',
-   'projects' => 'ProjectsController',
-   'tasks' => 'TasksController',
-   'comments' => 'CommentsController',
-]);
-//});

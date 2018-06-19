@@ -2,9 +2,10 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Cors;
 use Barryvdh\Cors\HandleCors;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Tymon\JWTAuth\Middleware\GetUserFromToken;
+use Tymon\JWTAuth\Middleware\RefreshToken;
 
 class Kernel extends HttpKernel
 {
@@ -65,5 +66,9 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+         'auth.jwt' => GetUserFromToken::class,
+         'refresh.jwt' => RefreshToken::class
+//       'jwt.auth' => Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+//       'jwt.refresh' => Tymon\JWTAuth\Middleware\RefreshToken::class,
     ];
 }
