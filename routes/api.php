@@ -21,7 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'Auth\LoginController@apiLogin');
 Route::post('register', 'Auth\RegisterController@apiRegister');
 
-Route::middleware(['auth.jwt'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
+   Route::post('logout', 'Auth\LoginController@apiLogout');
+
    Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
    Route::resources([
       'companies' => 'CompaniesController',
@@ -31,4 +33,3 @@ Route::middleware(['auth.jwt'])->group(function () {
       'comments' => 'CommentsController',
    ]);
 });
-Route::post('logout', 'Auth\LoginController@apiLogout');
