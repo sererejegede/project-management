@@ -32,8 +32,8 @@
         <label for="body">Comment</label>
         <textarea type="text" class="form-control" name="body" id="body" aria-describedby="body"></textarea>
       </div>
-      <input type="hidden" value="{{ $project->id }}" name="commentable_id" class="form-group">
-      <input type="hidden" value="{{ \App\Models\Project::class }}" name="commentable_type" class="form-group">
+      {{--<input type="hidden" value="{{ $project->id }}" name="commentable_id" class="form-group">--}}
+{{--      <input type="hidden" value="{{ \App\Models\Project::class }}" name="commentable_type" class="form-group">--}}
       {{--<div class="form-group">--}}
       {{--<label for="url">Password</label>--}}
       {{--<input type="password" class="form-control" id="url" placeholder="Password">--}}

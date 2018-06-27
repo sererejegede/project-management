@@ -16,7 +16,11 @@ class UsersController extends Controller
    public function index()
    {
       $users = User::all();
-      return view('users.index', ['users' => $users]);
+//      return view('users.index', ['users' => $users]);
+
+      /**API*/
+//      return $users->load('role');
+      return response()->json($users->load('role'), 200);
    }
 
    /**
@@ -51,7 +55,7 @@ class UsersController extends Controller
 //      return view('users.show', compact('user'));
 
       /** API */
-        return $user;
+        return response()->json($user, 200);
    }
 
    /**
@@ -88,10 +92,17 @@ class UsersController extends Controller
       //
    }
 
+   /**
+    * @param Request $request
+    * @param User $user
+    * @return \Illuminate\Http\JsonResponse
+    */
    public function uploadFile(Request $request, User $user)
    {
+//      return response()->json([$request->profile_pic], 200);
+//      return response()->json([$request->file('profile_pic')], 200);
       if (!($request->hasFile('profile_pic'))) {
-         return back()->with('custom_error', 'Could not upload, please retry');
+         return response()->json(['custom_error', 'Could not upload, please retry speonw']);
       } else {
 
          $userImage = (str_replace('storage/','public/', $user->profile_pic));
@@ -103,7 +114,7 @@ class UsersController extends Controller
             if (is_file(storage_path(str_replace('storage/','app/public/', $user->profile_pic)) )){
                Storage::delete($userImage);
             }
-            return back()->with('success', 'Profile picture changed successfully');
+            return response()->json(['success', 'Profile picture changed successfully'], 201);
          } else {
             return back()->with('custom_error', 'Could not upload, please retry');
          }

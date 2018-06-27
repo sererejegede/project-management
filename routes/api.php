@@ -23,7 +23,8 @@ Route::post('register', 'Auth\RegisterController@apiRegister');
 
 Route::middleware(['auth:api'])->group(function () {
    Route::post('logout', 'Auth\LoginController@apiLogout');
-
+//   Route::patch('uploadFile/{user}', 'UsersController@uploadFile')->name('upload.file');
+   Route::post('uploadFile/{user}', 'UsersController@uploadFile')->name('upload.file');
    Route::post('projects/addUser', 'ProjectsController@addUser')->name('projects.addUser');
    Route::resources([
       'companies' => 'CompaniesController',
