@@ -15,7 +15,8 @@ class UsersController extends Controller
     */
    public function index()
    {
-      $users = User::all();
+//      $users = User::all()->sortBy('id');
+      $users = User::orderBy('id', 'asc')->get();
 //      return view('users.index', ['users' => $users]);
 
       /**API*/
@@ -55,7 +56,7 @@ class UsersController extends Controller
 //      return view('users.show', compact('user'));
 
       /** API */
-        return response()->json($user, 200);
+        return response()->json($user->load('role'), 200);
    }
 
    /**
@@ -89,34 +90,47 @@ class UsersController extends Controller
     */
    public function destroy(User $user)
    {
-      //
+      $deleteUser = User::find($user->id)->delete();
+      if ($deleteUser > 0){
+         return response()->json('Deleted!', 200);
+      }
    }
 
-   /**
+   /** This is basically just for uploading profile pics for now
     * @param Request $request
     * @param User $user
     * @return \Illuminate\Http\JsonResponse
     */
    public function uploadFile(Request $request, User $user)
    {
-//      return response()->json([$request->profile_pic], 200);
-//      return response()->json([$request->file('profile_pic')], 200);
+     $token = auth()->tokenById(auth()->id());
+
       if (!($request->hasFile('profile_pic'))) {
-         return response()->json(['custom_error', 'Could not upload, please retry speonw']);
+         return response()->json(['message' => 'Invalid data'], 422);
       } else {
 
          $userImage = (str_replace('storage/','public/', $user->profile_pic));
          $profilePicUpdate = $user->update([
-            'profile_pic' => str_replace('public/','storage/', $request->profile_pic->store('public/profile_pics')),
+            'profile_pic' => str_replace('public/','http://localhost:8000/storage/', $request->profile_pic->store('public/profile_pics')),
          ]);
+
+
+         // Storing in file server
+//         $request->profile_pic->store('public/profile_pics');
+//         $newPath = str_replace('public/','storage/', $request->profile_pic);
+//         $profilePicUpdate = $user->update([
+//            'profile_pic' => 'http://localhost:8000/'.$newPath
+//         ]);
+
+
          if ($profilePicUpdate) {
             /*Delete previous record*/
             if (is_file(storage_path(str_replace('storage/','app/public/', $user->profile_pic)) )){
                Storage::delete($userImage);
             }
-            return response()->json(['success', 'Profile picture changed successfully'], 201);
+            return response()->json(['token' => $token, 'user' => $user->fresh()], 201);
          } else {
-            return back()->with('custom_error', 'Could not upload, please retry');
+            return response()->json(['error', 'Could not upload, please retry']);
          }
       }
    }

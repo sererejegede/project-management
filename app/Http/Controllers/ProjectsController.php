@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use App\Models\Project;
 use App\User;
 use Illuminate\Http\Request;
@@ -20,7 +19,7 @@ class ProjectsController extends Controller
 //        return view('projects.index', ['projects' => $projects]);
 
         /** API */
-       return $projects->load('company.user');
+       return response()->json($projects->load('company.user'), 200);
     }
 
     /**
@@ -41,11 +40,8 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        Project::create($request->all());
-//       return $request->all();
-       $company = Company::find($request->company_id);
-//       return view('companies.show', ['company' => $company])->with('success', $request->get('name').' Created Successfully');
-       return back()->with('success', $request->get('name').' Created Successfully');
+        $projectCreate = Project::create($request->all());
+       return response()->json($projectCreate, 201);
     }
 
     /**
@@ -61,7 +57,7 @@ class ProjectsController extends Controller
 //        return view('projects.show', compact('project'), ['comments' => $comments]);
 
        /**  API */
-       return $project->load('comments', 'users');
+       return response()->json($project->load('comments', 'users'), 200);
 
     }
 
@@ -85,7 +81,13 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+       $projectUpdate = Project::find($project->id)->update($request->all());
+
+       /** API*/
+       if ($projectUpdate){
+          return response()->json($project->fresh(), 200);
+       }
+       return response()->json(['error' => 'Could not update'], 500);
     }
 
     /**
@@ -100,7 +102,7 @@ class ProjectsController extends Controller
        if ($deleteProject > 0){
 //          $companies = Company::all();
 //          $users = User::all();
-          return back()->with('success', 'Deleted!');
+          return response()->json('Deleted!', 200);
        }
     }
 
